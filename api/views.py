@@ -5,18 +5,23 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, pagination
 from rest_framework.decorators import APIView
 
 from rest_framework import generics
 from rest_framework import mixins
 
 
-
+class CustomPagination(pagination.LimitOffsetPagination):
+    default_limit = 10
+    limit_query_param = 'l'
+    offset_query_param = 'o'
+    max_limit = 50
 
 class CategoryList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = CustomPagination
 
     def get(self, request):
         return self.list(request)
@@ -66,6 +71,7 @@ class AdvertisementDetails(generics.GenericAPIView, mixins.RetrieveModelMixin, m
 
     def delete(self, request, id):
         return self.destroy(request, id=id)
+
 
 
 # class AdvertisementList(APIView):
