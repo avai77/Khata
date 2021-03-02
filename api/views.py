@@ -14,90 +14,104 @@ from rest_framework import mixins
 
 
 
-class CategoryList(APIView):
+class CategoryList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
     def get(self, request):
-        categories = Category.objects.all()
-        serializers = CategorySerializer(categories, many=True)
-        return Response(serializers.data)
+        return self.list(request)
 
     def post(self, request):
-        serializers = CategorySerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self.create(request)
 
 
-class AdvertisementList(APIView):
+class CategoryDetails(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    lookup_field = 'id'
+
+    def get(self, request, id):
+        return self.retrieve(request, id=id)
+
+    def put(self, request, id):
+        return self.update(request, id=id)
+
+    def delete(self, request, id):
+        return self.destroy(request, id=id)
+
+
+class AdvertisementList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
 
     def get(self, request):
-        advertisement = Advertisement.objects.all()
-        serializers = AdvertisementSerializer(advertisement, many=True)
-        return Response(serializers.data)
+        return self.list(request)
 
     def post(self, request):
-        serializers = AdvertisementSerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self.create(request)
 
 
-class AdvertisementDetails(APIView):
+class AdvertisementDetails(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
 
-    def get_object(self, id):
-        try:
-            return Advertisement.objects.get(id=id)
-
-        except Advertisement.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    lookup_field = 'id'
 
     def get(self, request, id):
-        advertisement = self.get_object(id)
-        serializers = AdvertisementSerializer(advertisement)
-        return Response(serializers.data)
+        return self.retrieve(request, id=id)
 
     def put(self, request, id):
-        advertisement = self.get_object(id)
-        serializer = AdvertisementSerializer(advertisement, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self.update(request, id=id)
 
     def delete(self, request, id):
-        advertisement = self.get_object(id)
-        advertisement.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return self.destroy(request, id=id)
 
 
-class CategoryDetails(APIView):
+# class AdvertisementList(APIView):
+#
+#     def get(self, request):
+#         advertisement = Advertisement.objects.all()
+#         serializers = AdvertisementSerializer(advertisement, many=True)
+#         return Response(serializers.data)
+#
+#     def post(self, request):
+#         serializers = AdvertisementSerializer(data=request.data)
+#         if serializers.is_valid():
+#             serializers.save()
+#             return Response(serializers.data, status=status.HTTP_201_CREATED)
+#         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# class AdvertisementDetails(APIView):
+#
+#     def get_object(self, id):
+#         try:
+#             return Advertisement.objects.get(id=id)
+#
+#         except Advertisement.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#     def get(self, request, id):
+#         advertisement = self.get_object(id)
+#         serializers = AdvertisementSerializer(advertisement)
+#         return Response(serializers.data)
+#
+#     def put(self, request, id):
+#         advertisement = self.get_object(id)
+#         serializer = AdvertisementSerializer(advertisement, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     def delete(self, request, id):
+#         advertisement = self.get_object(id)
+#         advertisement.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+#
 
-    def get_object(self, id):
-        try:
-            return Category.objects.get(id=id)
 
-        except Category.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def get(self, request, id):
-        categories = self.get_object(id)
-        serializers = CategorySerializer(categories)
-        return Response(serializers.data)
-
-    def put(self, request, id):
-        category = self.get_object(id)
-        serializer = CategorySerializer(category, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, id):
-        category = self.get_object(id)
-        category.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 '''
 @api_view(['GET', 'POST'])
