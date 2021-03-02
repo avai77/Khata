@@ -29,7 +29,7 @@ class CategoryViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        category= Category.objects.get(pk=pk)
+        category = Category.objects.get(pk=pk)
 
         serializer = CategorySerializer(category, data=request.data)
         if serializer.is_valid():
@@ -45,8 +45,8 @@ class CategoryViewSet(viewsets.ViewSet):
 
 class AdvertisementViewSet(viewsets.ViewSet):
     def list(self, request):
-        advertisements = Advertisement.objects.all()
-        serializer = AdvertisementSerializer(advertisements, many=True)
+        advertisement = Advertisement.objects.all()
+        serializer = AdvertisementSerializer(advertisement, many=True)
         return Response(serializer.data)
 
     def create(self, request):
@@ -58,22 +58,22 @@ class AdvertisementViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Advertisement.objects.all()
-        category = get_object_or_404(queryset, pk=pk)
-        serializer = AdvertisementSerializer(Advertisement)
+        advertisement = get_object_or_404(queryset, pk=pk)
+        serializer = AdvertisementSerializer(advertisement)
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        category= Advertisement.objects.get(pk=pk)
+        advertisement = Advertisement.objects.get(pk=pk)
 
-        serializer = AdvertisementSerializer(Advertisement, data=request.data)
+        serializer = AdvertisementSerializer(advertisement, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        category = Advertisement.objects.get(pk=pk)
-        category.delete()
+        advertisement = Advertisement.objects.get(pk=pk)
+        advertisement.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import CategoryViewSet,AdvertisementViewSet
+from .views import CategoryViewSet, AdvertisementViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
