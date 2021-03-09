@@ -13,7 +13,7 @@ class Category(models.Model):
 
 class Advertisement(models.Model):
     title = models.CharField(max_length=250)
-    image = models.ImageField(upload_to='media/images', blank=True)
+    image = models.ImageField(upload_to='images')
     description = models.TextField(blank=True)
     phone = models.CharField(max_length=10, blank=True)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
@@ -26,4 +26,3 @@ class Advertisement(models.Model):
 
     def __str__(self):
         return self.title
-

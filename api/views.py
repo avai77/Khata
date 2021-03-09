@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
+from rest_framework.viewsets import ViewSet
+
 from .models import Category, Advertisement
-from .serializers import CategorySerializer, AdvertisementSerializer
+from .serializers import CategorySerializer, AdvertisementSerializer, UploadSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import APIView
@@ -42,19 +44,38 @@ class CategoryViewSet(viewsets.ViewSet):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class UploadViewSet(ViewSet):
+    serializer_class = UploadSerializer
+
+    def list(self, request):
+        return Response("GET API")
+
+    def create(self, request):
+        file_uploaded = request.FILES.get('file_uploaded')
+        content_type = file_uploaded.content_type
+        response = "POST API and you have uploaded a {} file".format(content_type)
+        return Response(response)
+
 
 class AdvertisementViewSet(viewsets.ViewSet):
+
+
     def list(self, request):
         advertisements = Advertisement.objects.all()
         serializer = AdvertisementSerializer(advertisements, many=True)
         return Response(serializer.data)
 
     def create(self, request):
-        serializer = AdvertisementSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer_class = AdvertisementSerializer
+        file_uploaded = request.FILES.get('file_uploaded')
+        content_type = file_uploaded.content_type
+        response = "POST API and you have uploaded a {} file".format(content_type)
+        return Response(response)
+        # serializer = AdvertisementSerializer(data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
         queryset = Advertisement.objects.all()
