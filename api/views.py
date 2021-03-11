@@ -21,6 +21,7 @@ class AdvertisementViewSet(viewsets.ModelViewSet):
     queryset = Advertisement.objects.all()
     serializer_class = AdvertisementSerializer
     authentication_classes = (TokenAuthentication,)
+    #HELLO
 
 
 
